@@ -1,0 +1,18 @@
+[
+	{
+		"model": "news.newsorigin",
+		"pk": 1,
+		"fields": {
+			"origin_name": "Linux公社",
+			"feed_link": "https://www.linuxidc.com/rssFeed.aspx"
+		}
+	},
+	{
+		"model": "news.newsorigin",
+		"pk": 2,
+		"fields": {
+			"origin_name": "Linux中国",
+			"feed_link": "https://linux.cn/rss.xml"
+		}
+	}
+]
