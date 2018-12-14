@@ -1,0 +1,76 @@
+version: '3'
+
+services:
+  # mysql
+  db:
+    image: mysql:8.0.13
+    hostname: db
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - dbnet
+    environment:
+      - MYSQL_DATABASE=linuxnews
+      # rand password
+      - MYSQL_ROOT_PASSWORD=5f91a613a6188eca16583a618d84000961bb04af
+    ports:
+      - "3307:3306"
+    volumes:
+      - /tmp/data/mysql:/var/lib/mysql
+
+  # redis
+  redis:
+    image: redis:latest
+    hostname: redis
+    networks:
+      - cachenet
+
+  # django
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: web
+    command: ./start-django.sh
+    environment:
+      - DB_PASSWORD=5f91a613a6188eca16583a618d84000961bb04af
+      - DB_ADDR=db
+      - DB_NAME=linuxnews
+      - REDIS_ADDR=redis
+    volumes:
+      - /tmp/logs:/log
+      - ../:/app
+    ports:
+      - "8000:8000"
+    networks:
+      - dbnet
+      - cachenet
+    depends_on:
+      - db
+
+  # celery
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: celery
+    networks:
+      - dbnet
+      - cachenet
+    environment:
+      - DB_PASSWORD=5f91a613a6188eca16583a618d84000961bb04af
+      - DB_ADDR=db
+      - DB_NAME=linuxnews
+      - REDIS_ADDR=redis
+    command: ./start-celery.sh
+    volumes:
+      - /tmp/logs:/log
+      - ../:/app
+    depends_on:
+      - redis
+
+networks:
+    dbnet:
+      driver: bridge
+
+    cachenet:
+      driver: bridge
