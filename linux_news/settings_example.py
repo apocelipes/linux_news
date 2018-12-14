@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
+from celery.schedules import crontab
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -77,15 +78,15 @@ WSGI_APPLICATION = 'linux_news.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+# loading config from environ(docker)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # database name
-        'NAME': '',
-        'HOST': '',
+        'NAME': os.environ.get('DB_NAME', 'linux_news'),
+        'HOST': os.environ.get('DB_ADDR', 'db'),
         'PORT': '',
-        'USER': '',
-        'PASSWORD': '',
+        'USER': 'root',
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
     }
 }
 
@@ -132,3 +133,23 @@ STATIC_URL = '/static/'
 FIXTURE_DIRS = (
     os.path.join(BASE_DIR, 'fixtures'),
 )
+
+# redis
+REDIS_PORT = 6379
+REDIS_DB = 0
+REDIS_HOST = os.environ.get('REDIS_ADDR', 'redis')
+
+# celery settings
+CELERY_ENABLE_UTC = True
+CELERY_IGNORE_RESULT = True
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}'
+CELERY_ACCEPT_CONTENT = ['application/json', ]
+CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_BEAT_SCHEDULE={
+        'fetch_news_every-1-hour': {
+            'task': 'news.tasks.fetch_all_news',
+            'schedule': crontab(minute=0, hour='*/1'),
+        }
+}
