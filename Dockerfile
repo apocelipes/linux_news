@@ -17,7 +17,7 @@ RUN apk add --no-cache -U tzdata \
     && echo "${TIME_ZONE}" > /etc/timezone
 
 # 安装依赖
-ADD ../requirements.txt /requirements.txt
+COPY requirements.txt /requirements.txt
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com --upgrade pip &&\
     pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com -r /requirements.txt &&\
     rm -r /root/.cache/
