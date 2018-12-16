@@ -2,7 +2,9 @@ from linux_news.celery import app
 from celery import shared_task
 from .models import *
 from django.db.models import Q
+from django.conf import settings
 from datetime import datetime
+import pytz
 import time
 import feedparser
 
@@ -26,18 +28,23 @@ def fetch_news(origin_name):
         entry.author = item.author
         entry.link = item.link
         entry.publish_time = structtime_2_datetime(item.published_parsed)
+        tz = pytz.timezone(settings.TIME_ZONE)
+        entry.publish_time.replace(tzinfo=tz)
         entry.summary = item.summary
         entry.save()
 
         # add tags
         for t in item.tags:
-            tag = NewsTag()
-            tag.tag_name = t['term']
-            tag.origin = origin
-            tag.save()
-            entry.tags.add(tag)
+            name = t['term']
+            condition = Q(tag_name=name) & Q(origin__origin_name=origin.origin_name)
+            tag = NewsTag.objects.filter(condition).first()
+            if tag is None:
+                tag = NewsTag()
+                tag.tag_name = name
+                tag.origin = origin
+                tag.save()
 
-        #entry.save()
+            entry.tags.add(tag)
 
 
 def structtime_2_datetime(t):
