@@ -20,10 +20,17 @@ RUN pip install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.
     pip install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com -r /requirements.txt &&\
     rm -r /root/.cache/
 
-# 挂载日志和代码
-VOLUME ["/log","/app"]
+# 创建服务用户，使用随机生成密码
+# WARNING: 生产环境请替换此密码
+RUN adduser -h /home/pydj -G root -D pydj &&\
+    echo "pydj:bZfUZj9SdLoz0+4vqxrbeMS1zgIk" | chpasswd
 
-# 进入代码所在目录
-WORKDIR /app
+USER pydj
+
+# 挂载日志和代码
+VOLUME ["/home/pydj/log","/home/pydj/app"]
+
+# 进入代码目录
+WORKDIR /home/pydj/app
 
 EXPOSE 8000
