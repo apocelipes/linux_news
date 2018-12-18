@@ -2,11 +2,11 @@ from linux_news.celery import app
 from celery import shared_task
 from .models import *
 from django.db.models import Q
-from django.conf import settings
 from datetime import datetime
-import pytz
+from .feedsfilter import filters
 import time
 import feedparser
+import pytz
 
 
 @app.task(ignore_result=True)
@@ -28,9 +28,15 @@ def fetch_news(origin_name):
         entry.author = item.author
         entry.link = item.link
         entry.publish_time = structtime_2_datetime(item.published_parsed)
-        tz = pytz.timezone(settings.TIME_ZONE)
-        entry.publish_time.replace(tzinfo=tz)
-        entry.summary = item.summary
+        # parse后的struct_time已经是utc时间
+        entry.publish_time = entry.publish_time.replace(tzinfo=pytz.utc)
+
+        summary_filter = filters.get(origin.origin_name)
+        if summary_filter is None:
+            entry.summary = item.summary
+        else:
+            entry.summary = summary_filter(item.summary)
+
         entry.save()
 
         # add tags
