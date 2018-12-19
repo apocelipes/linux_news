@@ -7,6 +7,7 @@ from .feedsfilter import filters
 import time
 import feedparser
 import pytz
+import html
 
 
 @app.task(ignore_result=True)
@@ -33,9 +34,10 @@ def fetch_news(origin_name):
 
         summary_filter = filters.get(origin.origin_name)
         if summary_filter is None:
-            entry.summary = item.summary
+            # summary has some HTML tag, we need escape them
+            entry.summary = html.escape(item.summary)
         else:
-            entry.summary = summary_filter(item.summary)
+            entry.summary = html.escape(summary_filter(item.summary))
 
         entry.save()
 
