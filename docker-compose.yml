@@ -33,7 +33,6 @@ services:
       dockerfile: Dockerfile
     hostname: web
     command: ./start-django.sh
-    user: pydj
     environment:
       - DB_PASSWORD=5f91a613a6188eca16583a618d84000961bb04af
       - DB_ADDR=db
@@ -65,7 +64,6 @@ services:
       - DB_NAME=linuxnews
       - REDIS_ADDR=redis
     command: ./start-celery.sh
-    user: pydj
     volumes:
       - /tmp/logs:/home/pydj/log
       - .:/home/pydj/app

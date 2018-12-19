@@ -7,5 +7,8 @@ sleep 10
 python3 manage.py migrate
 python3 manage.py loaddata initial_data.json
 
-# linux_news为wsgi.py所在的包的名字
-gunicorn -c /home/pydj/app/gunicorn.conf linux_news.wsgi:application
+if [[ $(whoami) == 'root' ]]; then
+    chown -R pydj /home/pydj/log
+    # linux_news为wsgi.py所在的包的名字
+    gosu pydj gunicorn -c /home/pydj/app/gunicorn.conf linux_news.wsgi:application
+fi
