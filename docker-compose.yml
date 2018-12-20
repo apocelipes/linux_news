@@ -40,7 +40,6 @@ services:
       - REDIS_ADDR=redis
     volumes:
       - /tmp/logs:/home/pydj/log
-      - .:/home/pydj/app
     ports:
       - "8000:8000"
     networks:
@@ -66,7 +65,6 @@ services:
     command: ./start-celery.sh
     volumes:
       - /tmp/logs:/home/pydj/log
-      - .:/home/pydj/app
     depends_on:
       - redis
 

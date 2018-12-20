@@ -22,18 +22,20 @@ RUN pip install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.
 
 # 创建服务用户，使用随机生成密码
 # WARNING: 生产环境请替换此密码
-RUN addgroup pydj &&\
-    adduser -h /home/pydj -G pydj -D pydj &&\
+RUN addgroup -g 2000 pydj &&\
+    adduser -u 2000 -h /home/pydj -G pydj -D pydj &&\
     echo "pydj:bZfUZj9SdLoz0+4vqxrbeMS1zgIk" | chpasswd
 
 # 使用gosu替代su
-RUN wget -q -O /usr/bin/gosu https://github.com/tianon/gosu/releases/download/1.11/gosu-amd64 &&\
+RUN wget -O /usr/bin/gosu https://github.com/tianon/gosu/releases/download/1.11/gosu-amd64 &&\
     chmod +x /usr/bin/gosu &&\
     gosu nobody true
 
 
-# 挂载日志和代码
-VOLUME ["/home/pydj/log","/home/pydj/app"]
+# 挂载日志
+VOLUME ["/home/pydj/log"]
+
+COPY . /home/pydj/app
 
 # 进入代码目录
 WORKDIR /home/pydj/app
