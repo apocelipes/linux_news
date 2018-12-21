@@ -37,7 +37,7 @@ def fetch_news(origin_name):
             # summary has some HTML tag, we need escape them
             entry.summary = html.escape(item.summary)
         else:
-            entry.summary = html.escape(summary_filter(item.summary))
+            entry.summary = html.escape(summary_filter(item.title, item.summary))
 
         entry.save()
 
