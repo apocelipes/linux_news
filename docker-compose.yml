@@ -13,9 +13,9 @@ services:
       # rand password
       - MYSQL_ROOT_PASSWORD=5f91a613a6188eca16583a618d84000961bb04af
     ports:
-      - "3307:3306"
+      - "127.0.0.1:3307:3306"
     volumes:
-      - /tmp/data/mysql:/var/lib/mysql
+      - /opt/linux_news/data/mysql:/var/lib/mysql
     restart: on-failure
 
   # redis
@@ -39,9 +39,9 @@ services:
       - DB_NAME=linuxnews
       - REDIS_ADDR=redis
     volumes:
-      - /tmp/logs:/home/pydj/log
+      - /var/log/linux_news:/home/pydj/log
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     networks:
       - dbnet
       - cachenet
@@ -64,7 +64,7 @@ services:
       - REDIS_ADDR=redis
     command: ./start-celery.sh
     volumes:
-      - /tmp/logs:/home/pydj/log
+      - /var/log/linux_news:/home/pydj/log
     depends_on:
       - redis
 
