@@ -13,7 +13,12 @@ def linuxcn_summary_filter(title, summary):
     if summary.find('<blockquote>') == -1:
         tag_list = summary.split('\n')
         data = tag_list[1]
-        summary_info = re.findall(r'<p>(.+)</p>', data)[0]
+        summaries = re.findall(r'<p>(.+)</p>', data)
+        if len(summaries) == 0:
+            summary_info = title
+        else:
+            summary_info = summaries[0]
+
         summary_info = re.sub("。$", "...", summary_info)
         return summary_info
 
