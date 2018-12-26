@@ -3,3 +3,14 @@
 .gitignore
 db.sqlite3
 venv
+frontend/package-lock.json
+frontend/node_modules
+frontend/src
+frontend/public
+frontend/.e*
+frontend/.b*
+frontend/vue.config.js
+frontend/package.json
+frontend/babel.config.js
+frontend/README.md
+frontend/postcss.config.js
