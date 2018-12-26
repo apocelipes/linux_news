@@ -1,9 +1,9 @@
 <template>
   <Menu theme="dark">
-    <Submenu v-for="(origin, index) of origins" :name="index" :key="index">
+    <Submenu v-for="(origin, index) of origins" :name="origin.originName" :key="index">
       <template slot="title">{{origin.originName}}</template>
       <MenuGroup title="分类">
-        <MenuItem v-for="tag of originTags[origin.originName]" :name="tag" :key="tag">
+        <MenuItem v-for="tag of originTags[origin.originName]" :name="origin.originName+'-'+tag" :key="tag">
           {{tag}}
         </MenuItem>
       </MenuGroup>
@@ -33,5 +33,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

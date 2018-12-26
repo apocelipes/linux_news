@@ -9,7 +9,8 @@ import { Button,
   Menu,
   MenuItem,
   MenuGroup,
-  Submenu
+  Submenu,
+  Icon
 } from 'iview'
 
 Vue.component('Button', Button)
@@ -22,3 +23,4 @@ Vue.component('Menu', Menu)
 Vue.component('MenuItem', MenuItem)
 Vue.component('MenuGroup', MenuGroup)
 Vue.component('Submenu', Submenu)
+Vue.component('Icon', Icon)
