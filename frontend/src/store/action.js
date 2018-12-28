@@ -1,9 +1,13 @@
 import axios from 'axios'
+import {
+  ORIGINS,
+  ORIGIN_TAGS
+} from './config'
 
 export default {
   // fetch origins and also fetch their tags
   async fetchOrigins ({ commit }) {
-    let originResp = await axios.get('http://localhost:8000/origins/')
+    let originResp = await axios.get(ORIGINS)
     for (let origin of originResp.data) {
       commit({
         type: 'addOrigin',
@@ -12,7 +16,7 @@ export default {
       })
       // fetch tags
       let originName = origin['origin_name']
-      let tagResp = await axios.get('http://localhost:8000/tags/' + originName + '/')
+      let tagResp = await axios.get(ORIGIN_TAGS + originName + '/')
       let tags = []
       for (let tag of tagResp.data) {
         tags = tags.concat(tag['tag_name'])
