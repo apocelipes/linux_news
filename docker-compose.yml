@@ -9,6 +9,8 @@ services:
     networks:
       - dbnet
     environment:
+      - MYSQL_USER=linux_news
+      - MYSQL_PASSWORD=c8f7ab2819fbeb5e47b5af7ed1a23638af0302dc
       - MYSQL_DATABASE=linuxnews
       # rand password
       - MYSQL_ROOT_PASSWORD=5f91a613a6188eca16583a618d84000961bb04af
@@ -34,7 +36,7 @@ services:
     hostname: web
     command: ./start-django.sh
     environment:
-      - DB_PASSWORD=5f91a613a6188eca16583a618d84000961bb04af
+      - DB_PASSWORD=c8f7ab2819fbeb5e47b5af7ed1a23638af0302dc
       - DB_ADDR=db
       - DB_NAME=linuxnews
       - REDIS_ADDR=redis
@@ -58,7 +60,7 @@ services:
       - dbnet
       - cachenet
     environment:
-      - DB_PASSWORD=5f91a613a6188eca16583a618d84000961bb04af
+      - DB_PASSWORD=c8f7ab2819fbeb5e47b5af7ed1a23638af0302dc
       - DB_ADDR=db
       - DB_NAME=linuxnews
       - REDIS_ADDR=redis
