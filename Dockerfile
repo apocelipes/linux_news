@@ -11,6 +11,8 @@ RUN apk add --no-cache -U tzdata \
     libc-dev \
     libffi-dev \
     openssl-dev \
+    libxml2-dev \
+    libxslt-dev \
     && ln -sf /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
     && echo "${TIME_ZONE}" > /etc/timezone
 
