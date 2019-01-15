@@ -14,6 +14,7 @@ services:
       - MYSQL_DATABASE=linuxnews
       # rand password
       - MYSQL_ROOT_PASSWORD=5f91a613a6188eca16583a618d84000961bb04af
+      - TZ=Asis/Shanghai
     ports:
       - "127.0.0.1:3307:3306"
     volumes:
@@ -24,6 +25,9 @@ services:
   redis:
     image: redis:latest
     hostname: redis
+    volumes:
+      # using local time
+      - /etc/localtime:/etc/localtime:ro
     networks:
       - cachenet
     restart: on-failure
