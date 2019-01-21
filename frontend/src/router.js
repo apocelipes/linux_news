@@ -3,13 +3,15 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
+const Home = () => import('./views/Home.vue')
+
 export default new Router({
   mode: 'history',
   routes: [
     {
       path: '/',
       name: 'home',
-      component: () => import(/* webpackChunkName: "home" */ './views/Home.vue')
+      component: Home
     }
   ]
 })
