@@ -4,6 +4,10 @@ import {
   ORIGIN_TAGS
 } from './config'
 
+// set csrf settings
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN'
+
 export default {
   // fetch origins and also fetch their tags
   async fetchOrigins ({ commit }) {
